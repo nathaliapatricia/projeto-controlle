@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Controlle</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+</head>
+
+<body>
+    <!--A <div> entra tudo da página-->
+
+    <div class="container">
+        <!--Aqui é a sidebar, o aside quer dizer que não faz parte do conteúdo principal, que seria a dashboard-->
+
+        <aside class="sidebar">
+            <img src="assets/img/logo.svg" alt="Logo Controlle" class="logo-controlle" />
+
+<!--MODAL DE SAÍDA-->
+
+            <button class="open-modal btn-saida" data-modal="modal-saida">+Adicionar Saída</button>
+
+            <dialog id="modal-saida">
+
+                    <form id="form-saida">
+                        <div class="modal-header">
+                            <h1 class="modal-title">Adicionar Saída</h1>
+
+                            <button class="close-modal" data-modal="modal-saida" type="button">
+                                <i class="fa-solid fa-square-xmark"></i>
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="input-group">
+                                <label for="name">Nome</label>
+                                    <input type="text" id="name-saida" name="name" placeholder="Nome da Saída">
+                            </div>
+
+                            <div class="input-group">
+                                <label for="data">Data</label>
+                                    <input type="date" id="data-saida" name="data-compra" placeholder="">
+                            </div>
+
+                            <div class="input-group">
+                                <label for="valor">Valor</label>
+                                    <input type="number" id="valor-saida" name="valor" placeholder="Valor da Compra">
+                            </div>
+                            
+                            <div class="input-group">
+                                <label for="dropdown">Forma de Pagamento</label>
+                                    <select id="forma-pagamento-saida" name="forma-pagamento">
+                                        <option value="" disabled selected>Selecione</option>
+                                        <option value="credito">Crédito</option>
+                                        <option value="debito">Débito</option>
+                                        <option value="debito">Pix</option>
+                                    </select>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="submit" class="btn-confirmar">Adicionar Saída</button>
+                        </div>
+                          
+                    </form>
+
+            </dialog>
+           
+<!--MODAL DE ENTRADA-->
+
+            <button class="open-modal btn-entrada" data-modal="modal-entrada">+Adicionar Entrada</button>
+
+            <dialog id="modal-entrada">
+                <form id="form-entrada">
+                    <div class="modal-header">
+                        <h1 class="modal-title">Adicionar Entrada</h1>
+
+                        <button class="close-modal" data-modal="modal-entrada" type="button">
+                            <i class="fa-solid fa-square-xmark"></i>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="input-group">
+                            <label for="name">Nome</label>
+                            <input input type="text" id="name-entrada" name="name" placeholder="Nome da Entrada">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="data">Data</label>
+                            <input type="date" id="data-entrada" name="data-entrada" placeholder="">
+                        </div>
+
+                        <div class="input-group">
+                            <label for="valor">Valor</label>
+                            <input type="number" id="valor-entrada" name="valor" placeholder="Valor da Entrada">
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="submit" class="btn-confirmar">Adicionar Entrada</button>
+                        </div>
+
+                    </div>
+                </form>
+            </dialog>
+
+            <hr />
+
+<!--MODAL DE PARCELAMENTO-->
+           <button class="open-modal btn-parcelas" data-modal="modal-parcelamento">Novo Parcelamento</button>
+
+            <dialog id="modal-parcelamento">
+                <form id="form-parcelas">
+                    <div class="modal-header">
+                        <h1 class="modal-title">Adicionar Parcelamento</h1>
+
+                        <button class="close-modal" data-modal="modal-parcelamento" type="button">
+                            <i class="fa-solid fa-square-xmark"></i>
+                        </button>
+                    </div>
+
+                <div class="modal-body">
+                    <div class="input-group">
+                        <label for="nome">Nome da Compra</label>
+                        <input type="text" id="nome-parcelas" name="nome-compra" placeholder="Nome da Compra">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="data">Data</label>
+                        <input type="date" id="data-parcelas" name="data-entrada" placeholder="">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="valor">Valor</label>
+                        <input type="number" id="valor-parcelas" name="valor" placeholder="Valor da Entrada">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="parcelas">Parcelado em:</label>
+                        <select id="parcelas" name="parcelamento">
+                            <option value="" disabled selected>Selecione</option>
+                            <option value="1">1x</option>
+                            <option value="2">2x</option>
+                            <option value="3">3x</option>
+                            <option value="4">4x</option>
+                            <option value="5">5x</option>
+                            <option value="6">6x</option>
+                            <option value="7">7x</option>
+                            <option value="8">8x</option>
+                            <option value="9">9x</option>
+                            <option value="10">10x</option>
+                            <option value="11">11x</option>
+                            <option value="12">12x</option>
+                        </select>
+                    </div>
+                </div>
+
+                     <div class="modal-footer">
+                            <button type="submit" class="btn-confirmar">Adicionar Parcelamento</button>
+                    </div>
+                </form>
+            </dialog>
+
+
+<!--MODAL DE ASSINATURA-->
+            <button class="open-modal btn-assinatura" data-modal="modal-assinatura">Nova Assinatura</button>
+
+            <dialog id="modal-assinatura">
+                <form id="form-assinatura">
+                    <div class="modal-header">
+                        <h1 class="modal-title">Nova Assinatura</h1>
+
+                        <button class="close-modal" data-modal="modal-assinatura" type="button">
+                            <i class="fa-solid fa-square-xmark"></i>
+                        </button>
+                    </div>
+                
+                <div class="modal-body">
+
+                    <div class="input-group">
+                        <label for="nome">Nome da Assinatura</label>
+                        <input type="text" id="nome-assinatura" name="nome-assinatura" placeholder="Nome da Assinatura">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="data">Data de Ínicio da Cobrança</label>
+                        <input type="date" id="data-assinatura" name="data-assinatura" placeholder="">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="valor">Valor Mensal</label>
+                        <input type="number" id="valor-assinatura" name="valor" placeholder="Valor da Entrada">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="tipo-cobranca">Tipo de Cobrança</label>
+                        <select id="tipo-cobranca" name="cobrança">
+                            <option value="Tipo de Cobrança" disabled selected>Selecione</option>
+                            <option value="mensal">Mensal</option>
+                            <option value="anual">Anual</option>
+                        </select>
+                    </div>
+                </div>
+
+
+                     <div class="modal-footer">
+                            <button type="submit" class="btn-confirmar">Adicionar Assinatura</button>
+                    </div>
+                </form>
+            </dialog>
+
+        </aside>
+
+        <!--CARDS DE ENTRADAS, SAIDAS E SALDO-->
+
+        <main class="dashboard">
+            <section class="cards-dashboard">
+                <div class="card-entradas">
+                    <p class="card-value" id="total-entradas">R$0,00</p>
+                    <p class="card-label-entrada">Entradas</p>
+                </div>
+
+                <div class="card-saidas">
+                    <p class="card-value" id="total-saidas">R$0,00</p>
+                    <p class="card-label-saida">Saídas</p>
+                </div>
+
+                <div class="card-saldo">
+                    <p class="card-value" id="total-saldo">R$0,00</p>
+                    <p class="card-label-saldo">Saldo</p>
+                </div>
+            </section>
+
+            <div class="historico-pagamentos-mensais">
+                <section class="historico-compras">
+                    <table class="tabela">
+                        <caption class="tabela-title">
+                            Histórico de Compras
+                        </caption>
+
+                        <thead class="tabela-header">
+                            <tr>
+                                <th class="header-text-tabela">Compra feita</th>
+                                <th class="header-text-tabela">Data</th>
+                                <th class="header-text-tabela">Valor</th>
+                                <th class="header-text-tabela">Parcelamento</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="tabela-compras">
+                            <!--Aqui vai ser trabalhado apenas o js-->
+                        </tbody>
+                    </table>
+                </section>
+
+                <aside class="pagamentos-mensais">
+                    <h2>Pagamentos Mensais</h2>
+                    <ul class="lista-mensal" id="pagamentos-mensais"></ul>
+                </aside>
+
+
+            </div>
+        </main>
+    </div>
+
+
+    <script src="js/utils/format.js"></script>
+    <script src="js/core/transactions.js"></script>
+    <script src="js/ui/modal.js"></script>
+    <script src="js/pages/dashboard.js"></script>
+</body>
+
+</html>

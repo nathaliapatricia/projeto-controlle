@@ -1,0 +1,474 @@
+/* box *{} Resetar qualquer estilo que tenha na página atual*/
+
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap');
+
+* { 
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #f9f9f9;
+    font-family: 'Sora', sans-serif;
+    color: #0D0907;
+
+}
+
+.container {
+    display: flex; /* Para colocar a dashboard e sidebar um ao lado do outro*/
+    min-height: 100vh; /* vh=viewport height ou seja, ele completa toda a tela */
+}
+
+.sidebar {
+    width: 400px;
+    background-color: #0C0F17;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.sidebar hr {
+  width: 40%;            /* controla o comprimento da linha */
+  border: none;          /* remove o estilo padrão */
+  border-top: 2px solid #6b7280; /* cor e espessura */
+  margin: 20px 0;        /* espaço em cima e embaixo */
+}
+
+.logo-controlle {
+    width: 300px;
+    margin-top: 100px;
+    margin-bottom: 50px;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+.sidemenu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    padding: 0;
+    gap: 16px;
+    margin-top: 30px;
+
+}
+
+
+.dashboard {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(12,1fr);
+    gap: 24px;
+    padding: 32px 40px; /* ao invés de margin-left nos cards */
+    grid-auto-rows: min-content;   /* cada linha só tem a altura do conteúdo */
+    align-content: start;          /* evita “empurrar” tudo pra preencher a tela */
+    max-width: 1500px; 
+    margin: 0 auto; 
+}
+
+.card-entradas,
+.card-saidas,
+.card-saldo {
+    grid-column: span 4;
+    min-height: 180px;
+    padding: 16px 20px;
+    text-align: left;
+}
+
+.cards-dashboard {
+    grid-column: 1 / -1; /* faz os cards ocuparem a largura total*/
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 24px;
+    
+}
+
+.card-entradas {
+    background-color: rgba(92,184,92,0.3);
+    border-radius: 20px;
+    text-align: center;
+}
+
+.card-saidas {
+    background-color: rgba(217,83,79,0.3);
+    border-radius: 20px;
+    text-align: center;
+}
+
+.card-saldo {
+    background-color: rgba(139,139,139,0.3);
+    border-radius: 20px;
+    text-align: center;
+}
+
+
+.card-label-entrada::before{
+    content: "";
+    width: 10px;
+    height: 10px;
+    background-color: #5CB85C ;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 6px;
+    margin-left: 30px;
+}
+
+.card-label-entrada {
+    display: flex;
+    align-items: center;
+    gap: 6px; /*espaço entre a bolinha e texto*/
+    font-size: 14px;
+    color: #161414;
+}
+
+.card-label-saida::before{
+    content: "";
+    width: 10px;
+    height: 10px;
+    background-color: #D9534F;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 6px;
+    margin-left: 30px;
+}
+
+
+.card-label-saida {
+    display: flex;
+    align-items: center;
+    gap: 6px; /*espaço entre a bolinha e texto*/
+    font-size: 14px;
+    color: #161414;
+}
+
+.card-label-saldo::before{
+    content: "";
+    width: 10px;
+    height: 10px;
+    background-color: #3BAFDA;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 6px;
+    margin-left: 30px;
+}
+
+.card-label-saldo {
+    display: flex;
+    align-items: center;
+    gap: 6px; /*espaço entre a bolinha e texto*/
+    font-size: 14px;
+    color: #161414;
+}
+
+
+.card-value {
+    display: flex;
+    align-items: center;
+    font-size: 32px;
+    font-weight: 500;
+    margin: 30px;
+}
+
+
+.tabela-title {
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.header-text-tabela {
+    font-size: 16px;
+    font-weight: 400;
+    text-align: left;
+}
+
+.historico-compras {
+    grid-column: 1 / span 8;
+    border-radius: 12px;
+    padding: 0px;
+}
+
+.historico-pagamentos-mensais {
+    display: 2 / 3;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+    align-items: start;
+    display: contents;
+
+}
+
+.pagamentos-mensais {
+    grid-column: 9 / -1;
+    background: rgba(196,196,196,0.3);
+    border-radius: 20px;
+    padding: 32px;
+    align-self: start;         /* <- impede que estique até o rodapé */
+    height: fit-content; 
+}
+
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.tabela thead {
+  background: #f3f4f6;
+}
+
+.tabela th, .tabela td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.tabela tbody tr:hover {
+  background: #f9fafb;
+}
+
+button:focus-visible,
+a:focus-visible,
+select:focus-visible,
+input:focus-visible {
+  outline: 3px solid #3BAFDA;
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+
+/* ESTILO DOS BOTÕES DO MODAL */
+
+.open-modal {
+    display: block;
+    width: 70%;
+    font-size: 22px;
+    margin: 8px;
+    padding: 12px;
+    border-radius: 30px;
+    border: 0px;
+    cursor: pointer; /* mostra a “mãozinha” */
+    transition: background-color 180ms ease, box-shadow 180ms ease, transform 120ms ease;
+}
+
+.open-modal:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,.15);
+}
+
+.open-modal:focus-visible {
+      /* foco de teclado visível (acessibilidade) */
+  outline: 2px solid currentColor;   /* ou sua cor de foco */
+  outline-offset: 2px;
+}
+.open-modal:active {
+     transform: translateY(1px);
+}
+
+
+.btn-saida {
+    background-color: #D9534F;
+    color: rgb(255, 255, 255);
+    font-weight: 600;
+}
+
+.btn-saida:hover {
+    background-color: #9c2d29;
+
+}
+
+.btn-entrada {
+    background-color: #5CB85C;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.btn-entrada:hover {
+    background-color: #2e852e;
+}
+
+.btn-parcelas {
+    background: none;
+    color: #f9f9f9;
+    font-weight:600;
+    padding: 0;
+}
+
+.btn-parcelas:hover{
+    color: #3BAFDA;
+}
+
+.btn-assinatura {
+    padding: 0;
+    background: none;
+    color: #f9f9f9;
+    font-weight:600;
+}
+
+.btn-assinatura:hover {
+    color: #3BAFDA;
+}
+
+
+/* AGORA É O CSS DOS MODALS INTERNOS */
+
+
+/* FIXAR NO MEIO DA TELA */
+
+dialog {
+  position: fixed;       /* fica fixo na tela */
+  top: 50%;              /* move até metade da tela */
+  left: 50%;
+  transform: translate(-50%, -50%); /* corrige o ponto de ancoragem */
+}
+
+
+/* BACKGROUND AO ABRIR O MODAL */
+
+dialog::backdrop {
+    background: rgba(12,15,23,0.3);
+    backdrop-filter: blur(2px);     /* opcional: blur suave */
+}
+
+/* ESTILO DO MODAL EM SÍ */
+
+dialog{
+    width: 100%;
+    max-width: 500px;   /* largura máxima */
+    max-height: 90vh;
+    background: #fff;
+    border-radius: 30px;
+    padding: 30px;
+    
+}
+
+/* ESTILO DA HEADER DO MODAL */
+
+.close-modal {
+  background: transparent;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+}
+
+.modal-header {
+    color: #1f4a55;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    font-size: 18px;
+}
+
+.modal-body {
+    
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+}
+
+.input-group > label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+.modal-body input,
+.modal-body select {
+  width: 100%;
+  height: 52px;                   /* aparência robusta */
+  background: #e6e6e6;
+  border: none;
+  border-radius: 9999px;
+  padding: 0 20px;
+  font-size: 16px;
+  color: #20323a;                 /* texto */
+  outline: none;
+}
+
+.modal-body select {
+  appearance: none;            /* remove setas nativas */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 44px;         /* espaço pra a seta */
+  background-image:
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%2383959c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 18px;
+}
+
+.modal-body ::placeholder { color: #7c8b91; }
+
+/* foco com “ring” suave */
+.modal-body input:focus,
+.modal-body select:focus {
+  box-shadow: 0 0 0 3px rgba(59, 133, 187, .25);
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 18px;
+}
+
+.btn-confirmar {
+  min-width: 180px;
+  height: 46px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 9999px;
+  background: #4caf50;           /* verde base */
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color .18s ease, box-shadow .18s ease, transform .12s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btn-confirmar::after {
+  content: "→";                  /* setinha minimalista */
+  font-weight: 700;
+}
+
+.btn-confirmar:hover  { box-shadow: 0 8px 20px rgba(76,175,80,.35); }
+.btn-confirmar:active { transform: translateY(1px); }
+.btn-confirmar:focus-visible { outline: 2px solid rgba(76,175,80,.5); outline-offset: 2px; }
+
+.modal-header { position: relative; }
+
+.close-modal {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;           /* círculo perfeito */
+  border: none;
+  background: transparent;      /* sem fundo */
+  color: #c0392b;               /* vermelho discreto pro "X" */
+  font-size: 18px;              /* deixa o ícone proporcional */
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: background-color .18s ease, transform .12s ease;
+}
+
+.close-modal:hover {
+  background-color: rgba(0, 0, 0, 0.06); /* só aparece no hover */
+}
+
+.close-modal:active {
+  transform: scale(0.92);       /* leve "aperto" no clique */
+}
