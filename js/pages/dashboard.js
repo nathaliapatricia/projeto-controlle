@@ -16,14 +16,66 @@ const listaPagamentoMensais = document.querySelector('#pagamentos-mensais')
 // Centraliza toda a lógica de renderização
 
 function uptadeUI(){
-    // 1. Atualiza os cards de totais
-    const totalIncome = calculateTotalIncome();
-    const totalExpense = calculateTotalExpense();
-    const totalBalance = calculateTotalBalance();
-
-    totalEntradasEl.textContent = formatCurrency(totalIncome);
-    totalSaidasEl.textContent = formatCurrency(totalExpense);
-    totalSaldoEl.textContent = formatCurrency(totalBalance);
-
     
+    const hoje = new Date();
+    const mesAtual = hoje.getMonth() +1;
+    const anoAtual = hoje.getFullYear();
+
+    const transacoesDoMesAtual = transactions.filter(transaction => {
+        const dataDaTransacao = new Date(transactions.date + "T00:00:00");
+        const mesDaTrasacao = dataDaTransacao.getFullMonth() + 1;
+        const anoDaTransacao = dataDaTransacao.getFullYear();
+
+        return mesDaTransacao === mesAtual && anoDaTransacao === anoAtual;
+    })
+
+    // Calcular as ENTRADAS de acordo com o mês atual.
+    const monthlyIncome = transacoesDoMesAtual
+        .filter (t => t.type === 'income')
+        .reduce ((summ, t) => summ + t.amount, 0);
+
+    const monthlyExpense = transacoesDoMesAtual
+        .filter (t => t.type === 'expense')
+        .reduce ((summ, t) => summ + t.amount, 0);
+
+    // CALCULO DO SALDO GERAL USANDO TODOS OS VALORES QUE ENTROU
+    const totalBalance = calculateBalance();
+    
+    totalEntradasEl.textContent = formatCurrency(monthlyIncome);
+    totalSaidasEl.textContent = formatCurrency(monthlyExpense);
+    totalSaidasEl.textContent = formatCurrent (totalBalance);
+
+    transacoesDoMesAtual.forEach(transaction => {
+        const newRowHTML = `
+        <tr>
+            <td>${transaction.name}</td>
+            <td>${formatDate(transaction.date)}</td>
+            <td>${formatCurrency(transaction.amount)}</td>
+            <td>${transaction.type === 'income' ? 'Entrada' : transaction.paymentMethod}</td>
+        </tr> `;
+
+        tabelaComprasBody.innerHTML += newRowHTML;
+
+    });
+
+    formSaida.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const nome = document.querySelector('#nome-saida'). value;
+        const data = document.querySelector('#data-saida'). value;
+        const valor = document.querySelector('#valor-saida'). value;
+        const formaPagamento = document.querySelector('#forma-pagamento'). value;
+        if (!nome || !data || !valor || !formaPagamento) {
+            alert('Por favor, preencha todos os campos!');
+            return;
+
+        }
+
+        const newTransaction = {id: new Date().getTime(), name: nome, date: data, amount: parseFloat(valor), paymentMethod: formaPagamento, type: 'expense'};
+        addTransaction(newTransaction);
+        uptadeUI();
+        formSaida.reset();
+        document.querySelector('#modal-saida').close();
+    });
+
+
 }
