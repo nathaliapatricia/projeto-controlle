@@ -11,6 +11,7 @@ Aplicação Web para **controle de finanças e investimentos** feita inicialment
 
 ## Estrutura do Projeto
 
+- /assets → imagens, ícones, logos
 - index.html → página principal
 - style.css → estilos globais
 - /js
@@ -18,7 +19,6 @@ Aplicação Web para **controle de finanças e investimentos** feita inicialment
     - /pages → lógicas de cada página (dashboard, finanças, investimentos)
     - /utils → funções auxiliares (datas, moedas, validações)
     - /core → regras de negócio (cálculos de saldo, preço médio, etc.)
-    - /assets → imagens, ícones, logos
 - README.md → documentação
 
 ## Tecnologias Utilizadas
