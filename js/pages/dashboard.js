@@ -64,6 +64,14 @@ function uptadeUI(){
         const data = document.querySelector('#data-saida'). value;
         const valor = document.querySelector('#valor-saida'). value;
         const formaPagamento = document.querySelector('#forma-pagamento'). value;
+
+        //DEBUGAR
+        console.log('--- Verificando valores do formulário de SAÍDA ---');
+        console.log('Valor do campo "Nome":', `"${nome}"`);
+        console.log('Valor do campo "Data":', `"${data}"`);
+        console.log('Valor do campo "Valor":', `"${valor}"`);
+        console.log('Valor do campo "Forma de Pagamento":', `"${formaPagamento}"`);
+
         if (!nome || !data || !valor || !formaPagamento) {
             alert('Por favor, preencha todos os campos!');
             return;
