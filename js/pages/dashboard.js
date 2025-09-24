@@ -5,7 +5,7 @@ const formSaida = document.querySelector('#form-saida');
 console.log('Elemento formSaida encontrado pelo JS:', formSaida);
 const formEntrada = document.querySelector('#form-entrada');
 
-const formParcelamento = document.querySelector('#form-parcelamento');
+const formParcelamento = document.querySelector('#form-parcelas');
 const formAssinatura = document.querySelector('#form-assinatura');
 
 // DASHBOARD
@@ -62,6 +62,10 @@ function updateUI() {
     });
 }
 
+// CODIGOS DE EVENT LISTENERS
+
+// FORM SAIDA
+
 formSaida.addEventListener('submit', (event) => {
     event.preventDefault();
     const nome = document.querySelector('#name-saida').value;
@@ -82,6 +86,8 @@ formSaida.addEventListener('submit', (event) => {
     formSaida.reset();
     document.querySelector('#modal-saida').close();
 });
+
+// FORM ENTRADA
 
 formEntrada.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -107,6 +113,55 @@ formEntrada.addEventListener('submit', (event) => {
     document.querySelector('#modal-entrada').close();
     
 });
+
+// FORM PARCELAMENTOS
+
+formParcelamento.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const nome = document.querySelector('#nome-parcelas').value;
+    const data = document.querySelector('#data-parcelas').value;
+    const valorTotal = document.querySelector('#valor-parcelas').value;
+    const numeroDeParcelas = document.querySelector('#parcelas').value;
+
+    if (!nome || !data || !valorTotal || !numeroDeParcelas) {
+        alert('Por favor, preencha todos os campos!');
+        return;
+    }
+
+    const valorDasParcelas = parseFloat(valorTotal) / parseInt(numeroDeParcelas);
+    const numeroTotalDeParcelas = parseInt(numeroDeParcelas);
+    const dataBase = new Date(data + "T00:00:00");
+
+
+    for (let i = 1; i <= numeroDeParcelas; i++) {
+        const dataDaParcela = new Date(dataBase)
+        dataDaParcela.setMonth(dataBase.getMonth() + (i - 1));
+
+        const ano = dataDaParcela.getFullYear();
+        const mes = String(dataDaParcela.getMonth() + 1).padStart(2, '0');
+        const dia = String(dataDaParcela.getDate()).padStart(2, '0');
+
+        const dataFormatadaParaSalvar = `${ano}-${mes}-${dia}`;
+        console.log(`Data da Parcela ${i}: ${dataFormatadaParaSalvar}`);
+        const nomePersonalizado = `${nome} (${i}/${numeroDeParcelas})`;
+
+        const newTransaction = {
+              id: new Date().getTime() + i,
+              name: nomePersonalizado,
+              date: dataFormatadaParaSalvar,
+              amount: valorDasParcelas,
+              paymentMethod: "credito",
+              type: 'expense'
+        };
+        
+        addTransaction(newTransaction);
+    }
+
+    updateUI();
+    formParcelamento.reset();
+    document.querySelector('#modal-parcelamento').close();
+})
+
 
 
 
