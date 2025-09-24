@@ -85,6 +85,26 @@ formSaida.addEventListener('submit', (event) => {
 
 formEntrada.addEventListener('submit', (event) => {
     event.preventDefault();
+    const nome = document.querySelector('#name-entrada').value;
+    const data = document.querySelector('#data-entrada').value;
+    const valor = document.querySelector('#valor-entrada').value;
+
+    if (!nome || !data || !valor) {
+        alert('Por favor, preencha todos os campos!');
+        return;
+    }
+
+    const newTransaction = {id: new Date().getTime(),
+                            name: nome,
+                            date: data,
+                            amount: parseFloat(valor),
+                            type: 'income'
+                            };  
+    addTransaction(newTransaction);
+
+    updateUI();
+    formEntrada.reset();
+    document.querySelector('#modal-entrada').close();
     
 });
 
