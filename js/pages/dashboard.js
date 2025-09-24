@@ -162,7 +162,63 @@ formParcelamento.addEventListener('submit', (event) => {
     document.querySelector('#modal-parcelamento').close();
 })
 
+// FORM ASSINATURAS
 
+formAssinatura.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const nomeAssinatura = document.querySelector('#nome-assinatura').value;
+    const dataDaAssinatura = document.querySelector('#data-assinatura').value;
+    const valorAssinatura = document.querySelector('#valor-assinatura').value;
+    const tipoAssinatura = document.querySelector('#tipo-cobranca').value;
+
+    if (!nomeAssinatura || !dataDaAssinatura || !valorAssinatura || !tipoAssinatura) {
+        alert('Por favor, preencha todos os campos!');
+        return;
+    }
+
+    let numeroDeMeses
+
+    if (tipoAssinatura === 'trimestral') {
+        numeroDeMeses = 3;
+    } else if (tipoAssinatura === 'semestral') {
+        numeroDeMeses = 6;
+    } else if (tipoAssinatura === 'anual') {
+        numeroDeMeses = 12;
+    } else { numeroDeMeses = 12;
+    }
+
+    const valorDigitado = parseFloat(valorAssinatura);
+    const dataBase = new Date(dataDaAssinatura + "T00:00:00");
+
+    const valorDaMensalidade = (tipoAssinatura === 'anual') ? valorDigitado/12 : valorDigitado;
+
+    for (let i = 1; i <= numeroDeMeses; i++)    {
+        const dataDaParcela = new Date(dataBase);
+        dataDaParcela.setMonth(dataBase.getMonth() + (i - 1));
+        const dataFormatadaParaSalvar = `${dataDaParcela.getFullYear()}-${String(dataDaParcela.getMonth() + 1).padStart(2, '0')}-${String(dataDaParcela.getDate()).padStart(2, '0')}`;
+        
+        const nomePersonalizado = (tipoAssinatura === 'anual')
+            ? `${nomeAssinatura} (${i}/${numeroDeMeses})` 
+            : nomeAssinatura;
+
+        const newTransaction = {
+            id: new Date().getTime() + i,
+            name: nomePersonalizado,
+            date: dataFormatadaParaSalvar,
+            amount: valorDaMensalidade,
+            paymentMethod: "recorrente",
+            type: 'expense'
+        };
+
+        addTransaction(newTransaction);
+    }
+    
+        updateUI();
+        formAssinatura.reset();
+        document.querySelector('#modal-assinatura').close();
+
+}) 
 
 
 updateUI();
