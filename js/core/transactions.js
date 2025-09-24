@@ -1,28 +1,38 @@
-// Nosso "banco de dados" temporário.
-// É um array que vai guardar objetos, onde cada objeto é uma transação.
-
 let transactions = [];
 
-// Função para adicionar uma nova transação
-function addTransaction(transactions) {
-    // Adiciona a nova transação no início do array para aparecer primeiro na lista
+/**
+* @param {object} transaction
+*/
+
+function addTransaction(transaction) {
     transactions.unshift(transaction);
     console.log('Transações atuais:', transactions);
 }
 
-// Funções para calcular os totais
+/** Calcula a soma das transações que são 'income'
+* @returns {numbers}
+*/
+
 function calculateTotalIncome() {
     return transactions
-        .filter(t => t.type === 'income') // Filtra apenas as entradas
-        .reduce ((summ, t) => sum + t.amount, 0); // Soma os valores
+        .filter(t => t.type === 'income')
+        .reduce((summ, t) => summ + t.amount, 0);
 }
+
+/** Calcula a soma das transações que são 'expense'
+ * @returns {numbers}
+ */
 
 function calculateTotalExpense() {
     return transactions
-    .filter(t => t.type === 'expense') // Filtra apenas as saídas
-    .reduce((summ, t) => summ + t.amount, 0); // Soma os valores
+        .filter(t => t.type === 'expense')
+        .reduce((summ, t) => summ + t.amount, 0);
 }
 
-function calculateTotalBalance() {
+/** Calcula o saldo final
+ * @returns {numbers}
+ */
+
+function calculateBalance() {
     return calculateTotalIncome() - calculateTotalExpense();
 }

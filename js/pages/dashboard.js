@@ -64,10 +64,10 @@ function updateUI() {
 
 formSaida.addEventListener('submit', (event) => {
     event.preventDefault();
-    const nome = document.querySelector('#nome-saida').value;
+    const nome = document.querySelector('#name-saida').value;
     const data = document.querySelector('#data-saida').value;
     const valor = document.querySelector('#valor-saida').value;
-    const formaPagamento = document.querySelector('#forma-pagamento').value;
+    const formaPagamento = document.querySelector('#forma-pagamento-saida').value;
 
     if (!nome || !data || !valor || !formaPagamento) {
         alert('Por favor, preencha todos os campos!');
