@@ -2,7 +2,6 @@ console.log("Arquivo dashboard.js foi carregado com sucesso!");
 
 // --- 1. SELEÇÃO DE ELEMENTOS DO DOM ---
 const formSaida = document.querySelector('#form-saida');
-console.log('Elemento formSaida encontrado pelo JS:', formSaida);
 const formEntrada = document.querySelector('#form-entrada');
 
 const formParcelamento = document.querySelector('#form-parcelas');
@@ -25,6 +24,9 @@ function updateUI() {
     const mesAtual = hoje.getMonth() + 1;
     const anoAtual = hoje.getFullYear();
 
+    console.log('--- UPDATE UI: Verificando o array ANTES de filtrar ---', transactions);
+
+
     const transacoesDoMesAtual = transactions.filter(transaction => {
         const dataDaTransacao = new Date(transaction.date + "T00:00:00");
         const mesDaTransacao = dataDaTransacao.getMonth() + 1;
@@ -32,6 +34,9 @@ function updateUI() {
 
         return mesDaTransacao === mesAtual && anoDaTransacao === anoAtual;
     });
+
+        console.log('--- UPDATE UI: Conteúdo do array DEPOIS de filtrar ---', transacoesDoMesAtual);
+
 
     const monthlyIncome = transacoesDoMesAtual
         .filter(t => t.type === 'income')
@@ -60,7 +65,41 @@ function updateUI() {
         `;
         tabelaComprasBody.innerHTML += newRowHTML;
     });
-}
+
+
+// ATUALIZAÇÃO DA LISTA DE PAGAMENTOS MENSAIS (a ser implementada)
+// A lógica para preencher a #pagamentos-mensais viria aqui...
+// SUBSTITUA SEU BLOCO DE PAGAMENTOS MENSAIS POR ESTE BLOCO DE DEBUG
+
+// Dentro da sua função updateUI...
+
+// --- ATUALIZAÇÃO DA LISTA DE PAGAMENTOS MENSAIS (VERSÃO FINAL E LIMPA) ---
+
+const pagamentosDoMes = transacoesDoMesAtual.filter(transaction => {
+    return transaction.type === 'expense' &&
+           transaction.paymentMethod !== 'debito' &&
+           transaction.paymentMethod !== 'pix';
+});
+
+// Limpa o conteúdo da lista <ul>
+listaPagamentosMensais.innerHTML = ''; 
+
+if (pagamentosDoMes.length > 0) {
+    // Se TEM pagamentos, preenche a lista com eles
+    pagamentosDoMes.forEach(pagamento => {
+        const listItemHTML = `
+            <li>
+                <span class="pagamento-nome">${pagamento.name}</span>
+                <span class="pagamento-valor">${formatCurrency(pagamento.amount)}</span>
+                <span class="pagamento-info">${pagamento.installmentInfo || ''}</span>
+            </li>
+        `;
+        listaPagamentosMensais.innerHTML += listItemHTML;
+    });
+} else {
+    // Se NÃO TEM pagamentos, preenche com a mensagem
+    listaPagamentosMensais.innerHTML = '<li class="sem-pagamentos">Nenhum pagamento recorrente este mês.</li>';
+}};
 
 // CODIGOS DE EVENT LISTENERS
 
@@ -151,11 +190,12 @@ formParcelamento.addEventListener('submit', (event) => {
 
         const newTransaction = {
               id: new Date().getTime() + i,
-              name: nomePersonalizado,
+              name: nome,
               date: dataFormatadaParaSalvar,
               amount: valorDasParcelas,
               paymentMethod: "credito",
-              type: 'expense'
+              type: 'expense',
+              installmentInfo: `${i}/${numeroTotalDeParcelas}`,
         };
         
         addTransaction(newTransaction);
@@ -171,40 +211,40 @@ formParcelamento.addEventListener('submit', (event) => {
 formAssinatura.addEventListener('submit', (event) => {
     event.preventDefault();
 
-    const nome = document.querySelector('#nome-assinatura').value;
-    const dataDaAssinatura = document.querySelector('#data-assinatura').value;
-    const valorAssinatura = document.querySelector('#valor-assinatura').value;
-    const tipoAssinatura = document.querySelector('#tipo-cobranca').value;
+    const nomeAssinatura = document.querySelector('#nome-assinatura').value;
+    const dataInicio = document.querySelector('#data-assinatura').value;
+    const valorString = document.querySelector('#valor-assinatura').value;
+    const tipoCobranca = document.querySelector('#tipo-cobranca').value;
 
-    if (!nome || !dataDaAssinatura || !valorAssinatura || !tipoAssinatura) {
+    if (!nomeAssinatura || !dataInicio || !valorString || !tipoCobranca) {
         alert('Por favor, preencha todos os campos!');
         return;
     }
 
-    let numeroDeMeses
-
-    if (tipoAssinatura === 'trimestral') {
+    const valor = parseFloat(valorString.replace(',', '.'));
+    const dataBase = new Date(dataInicio + "T00:00:00");
+    let numeroDeMeses;
+    
+    if (tipoCobranca === 'trimestral') {
         numeroDeMeses = 3;
-    } else if (tipoAssinatura === 'semestral') {
+    } else if (tipoCobranca === 'semestral') {
         numeroDeMeses = 6;
-    } else if (tipoAssinatura === 'anual') {
+    } else if (tipoCobranca === 'anual') {
         numeroDeMeses = 12;
-    } else { numeroDeMeses = 12;
+    } else {
+        numeroDeMeses = 12;
     }
 
-    const valorDigitado = parseFloat(valorAssinatura.replace(',', '.'));
-    const dataBase = new Date(dataDaAssinatura + "T00:00:00");
+    const valorDaMensalidade = (tipoCobranca === 'anual') ? valor / numeroDeMeses : valor;
 
-    const valorDaMensalidade = (tipoAssinatura === 'anual') ? valorDigitado/12 : valorDigitado;
-
-    for (let i = 1; i <= numeroDeMeses; i++)    {
+    for (let i = 1; i <= numeroDeMeses; i++) {
         const dataDaParcela = new Date(dataBase);
         dataDaParcela.setMonth(dataBase.getMonth() + (i - 1));
         const dataFormatadaParaSalvar = `${dataDaParcela.getFullYear()}-${String(dataDaParcela.getMonth() + 1).padStart(2, '0')}-${String(dataDaParcela.getDate()).padStart(2, '0')}`;
         
-        const nomePersonalizado = (tipoAssinatura === 'anual')
-            ? `${nome} (${i}/${numeroDeMeses})` 
-            : nome;
+        const nomePersonalizado = (tipoCobranca !== 'mensal')
+            ? `${nomeAssinatura} (${i}/${numeroDeMeses})` 
+            : nomeAssinatura;
 
         const newTransaction = {
             id: new Date().getTime() + i,
@@ -215,14 +255,16 @@ formAssinatura.addEventListener('submit', (event) => {
             type: 'expense'
         };
 
+        console.log('Assinatura/Parcela criada:', newTransaction);
         addTransaction(newTransaction);
     }
     
-        updateUI();
-        formAssinatura.reset();
-        document.querySelector('#modal-assinatura').close();
-
-}) 
+    updateUI();
+    formAssinatura.reset();
+    document.querySelector('#modal-assinatura').close();
+});
+// ATUALIZAÇÃO DA LISTA DE PAGAMENTOS MENSAIS (a ser implementada)
+// A lógica para preencher a #pagamentos-mensais viria aqui...
 
 
 updateUI();

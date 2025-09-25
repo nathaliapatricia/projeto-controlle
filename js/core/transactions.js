@@ -34,5 +34,21 @@ function calculateTotalExpense() {
  */
 
 function calculateBalance() {
-    return calculateTotalIncome() - calculateTotalExpense();
+    const hoje = new Date();
+
+    const transacoesAteHoje = transactions.filter(transaction =>{
+        const dataDaTransacao = new Date(transaction.date + "T00:00:00");
+        return dataDaTransacao <= hoje;
+    });
+
+     const totalIncome = transacoesAteHoje
+        .filter(t => t.type === 'income')
+        .reduce((sum, t) => sum + t.amount, 0);
+
+    const totalExpense = transacoesAteHoje
+        .filter(t => t.type === 'expense')
+        .reduce((sum, t) => sum + t.amount, 0);
+
+    return totalIncome - totalExpense;
+
 }
