@@ -70,15 +70,19 @@ formSaida.addEventListener('submit', (event) => {
     event.preventDefault();
     const nome = document.querySelector('#name-saida').value;
     const data = document.querySelector('#data-saida').value;
-    const valor = document.querySelector('#valor-saida').value;
+    const valorString = document.querySelector('#valor-saida').value;
     const formaPagamento = document.querySelector('#forma-pagamento-saida').value;
 
-    if (!nome || !data || !valor || !formaPagamento) {
+    const valorCorrigido = valorString.replace(',', '.');
+
+    const valorNumerico = parseFloat(valorCorrigido);
+
+    if (!nome || !data || !valorString || !formaPagamento) {
         alert('Por favor, preencha todos os campos!');
         return;
     }
 
-    const newTransaction = { id: new Date().getTime(), name: nome, date: data, amount: parseFloat(valor), paymentMethod: formaPagamento, type: 'expense' };
+    const newTransaction = { id: new Date().getTime(), name: nome, date: data, amount: valorNumerico, paymentMethod: formaPagamento, type: 'expense' };
     addTransaction(newTransaction);
 
     
@@ -167,12 +171,12 @@ formParcelamento.addEventListener('submit', (event) => {
 formAssinatura.addEventListener('submit', (event) => {
     event.preventDefault();
 
-    const nomeAssinatura = document.querySelector('#nome-assinatura').value;
+    const nome = document.querySelector('#nome-assinatura').value;
     const dataDaAssinatura = document.querySelector('#data-assinatura').value;
     const valorAssinatura = document.querySelector('#valor-assinatura').value;
     const tipoAssinatura = document.querySelector('#tipo-cobranca').value;
 
-    if (!nomeAssinatura || !dataDaAssinatura || !valorAssinatura || !tipoAssinatura) {
+    if (!nome || !dataDaAssinatura || !valorAssinatura || !tipoAssinatura) {
         alert('Por favor, preencha todos os campos!');
         return;
     }
@@ -188,7 +192,7 @@ formAssinatura.addEventListener('submit', (event) => {
     } else { numeroDeMeses = 12;
     }
 
-    const valorDigitado = parseFloat(valorAssinatura);
+    const valorDigitado = parseFloat(valorAssinatura.replace(',', '.'));
     const dataBase = new Date(dataDaAssinatura + "T00:00:00");
 
     const valorDaMensalidade = (tipoAssinatura === 'anual') ? valorDigitado/12 : valorDigitado;
@@ -199,8 +203,8 @@ formAssinatura.addEventListener('submit', (event) => {
         const dataFormatadaParaSalvar = `${dataDaParcela.getFullYear()}-${String(dataDaParcela.getMonth() + 1).padStart(2, '0')}-${String(dataDaParcela.getDate()).padStart(2, '0')}`;
         
         const nomePersonalizado = (tipoAssinatura === 'anual')
-            ? `${nomeAssinatura} (${i}/${numeroDeMeses})` 
-            : nomeAssinatura;
+            ? `${nome} (${i}/${numeroDeMeses})` 
+            : nome;
 
         const newTransaction = {
             id: new Date().getTime() + i,
