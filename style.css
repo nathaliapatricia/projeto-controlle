@@ -218,7 +218,7 @@ body {
   gap: 16px; /* Espaço entre as colunas */
   padding: 10px 0;
   border-bottom: 1px solid rgba(0,0,0,0.1);
-  font-size: 14px;
+  font-size: 18px;
   align-items: center;
 }
 
@@ -243,7 +243,7 @@ body {
     background: rgba(0,0,0,0.05);
     padding: 2px 6px;
     border-radius: 4px;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 .sem-pagamentos {

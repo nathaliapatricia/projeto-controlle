@@ -24,8 +24,7 @@ function updateUI() {
     const mesAtual = hoje.getMonth() + 1;
     const anoAtual = hoje.getFullYear();
 
-    console.log('--- UPDATE UI: Verificando o array ANTES de filtrar ---', transactions);
-
+   
 
     const transacoesDoMesAtual = transactions.filter(transaction => {
         const dataDaTransacao = new Date(transaction.date + "T00:00:00");
@@ -34,8 +33,6 @@ function updateUI() {
 
         return mesDaTransacao === mesAtual && anoDaTransacao === anoAtual;
     });
-
-        console.log('--- UPDATE UI: Conteúdo do array DEPOIS de filtrar ---', transacoesDoMesAtual);
 
 
     const monthlyIncome = transacoesDoMesAtual
@@ -54,6 +51,9 @@ function updateUI() {
 
     tabelaComprasBody.innerHTML = '';
 
+
+ // TABELA HISTORICO DE COMPRAS
+ 
     transacoesDoMesAtual.forEach(transaction => {
         const newRowHTML = `
             <tr>
@@ -67,13 +67,6 @@ function updateUI() {
     });
 
 
-// ATUALIZAÇÃO DA LISTA DE PAGAMENTOS MENSAIS (a ser implementada)
-// A lógica para preencher a #pagamentos-mensais viria aqui...
-// SUBSTITUA SEU BLOCO DE PAGAMENTOS MENSAIS POR ESTE BLOCO DE DEBUG
-
-// Dentro da sua função updateUI...
-
-// --- ATUALIZAÇÃO DA LISTA DE PAGAMENTOS MENSAIS (VERSÃO FINAL E LIMPA) ---
 
 const pagamentosDoMes = transacoesDoMesAtual.filter(transaction => {
     return transaction.type === 'expense' &&
@@ -81,11 +74,10 @@ const pagamentosDoMes = transacoesDoMesAtual.filter(transaction => {
            transaction.paymentMethod !== 'pix';
 });
 
-// Limpa o conteúdo da lista <ul>
+
 listaPagamentosMensais.innerHTML = ''; 
 
 if (pagamentosDoMes.length > 0) {
-    // Se TEM pagamentos, preenche a lista com eles
     pagamentosDoMes.forEach(pagamento => {
         const listItemHTML = `
             <li>
@@ -97,9 +89,10 @@ if (pagamentosDoMes.length > 0) {
         listaPagamentosMensais.innerHTML += listItemHTML;
     });
 } else {
-    // Se NÃO TEM pagamentos, preenche com a mensagem
     listaPagamentosMensais.innerHTML = '<li class="sem-pagamentos">Nenhum pagamento recorrente este mês.</li>';
 }};
+
+
 
 // CODIGOS DE EVENT LISTENERS
 
