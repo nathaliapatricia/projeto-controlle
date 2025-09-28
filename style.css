@@ -512,3 +512,43 @@ dialog{
 .close-modal:active {
   transform: scale(0.92);       /* leve "aperto" no clique */
 }
+
+/* BOTÕES DE AÇÃO NA TABELA */
+.acoes-tabela {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.btn-editar,
+.btn-excluir {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.btn-editar {
+    background-color: #3BAFDA;
+    color: white;
+}
+
+.btn-editar:hover {
+    background-color: #2980b9;
+    transform: scale(1.1);
+}
+
+.btn-excluir {
+    background-color: #D9534F;
+    color: white;
+}
+
+.btn-excluir:hover {
+    background-color: #c0392b;
+    transform: scale(1.1);
+}
