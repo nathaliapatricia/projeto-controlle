@@ -19,150 +19,239 @@ const listaPagamentosMensais = document.querySelector("#pagamentos-mensais");
 // --- 2. FUNÇÕES PRINCIPAIS ---
 
 function updateUI() {
-  const hoje = new Date();
-  const mesAtual = hoje.getMonth() + 1;
-  const anoAtual = hoje.getFullYear();
+    const hoje = new Date();
+    const mesAtual = hoje.getMonth() + 1;
+    const anoAtual = hoje.getFullYear();
 
-  const transacoesDoMesAtual = transactions.filter((transaction) => {
-    const dataDaTransacao = new Date(transaction.date + "T00:00:00");
-    const mesDaTransacao = dataDaTransacao.getMonth() + 1;
-    const anoDaTransacao = dataDaTransacao.getFullYear();
+    const transacoesDoMesAtual = transactions.filter(transaction => {
+        const dataDaTransacao = new Date(transaction.date + "T00:00:00");
+        const mesDaTransacao = dataDaTransacao.getMonth() + 1;
+        const anoDaTransacao = dataDaTransacao.getFullYear();
 
-    return mesDaTransacao === mesAtual && anoDaTransacao === anoAtual;
-  });
+        return mesDaTransacao === mesAtual && anoDaTransacao === anoAtual;
+    });
 
-  const monthlyIncome = transacoesDoMesAtual
-    .filter((t) => t.type === "income")
-    .reduce((sum, t) => sum + t.amount, 0);
+    // Calcula os totais mensais diretamente aqui
+    const monthlyIncome = transacoesDoMesAtual
+        .filter(t => t.type === 'income')
+        .reduce((sum, t) => sum + t.amount, 0);
 
-  const monthlyExpense = transacoesDoMesAtual
-    .filter((t) => t.type === "expense")
-    .reduce((sum, t) => sum + t.amount, 0);
+    const monthlyExpense = transacoesDoMesAtual
+        .filter(t => t.type === 'expense')
+        .reduce((sum, t) => sum + t.amount, 0);
 
-  const totalBalance = calculateBalance();
+    // Calcula o saldo total (não só do mês atual)
+    const totalIncome = transactions
+        .filter(t => t.type === 'income')
+        .reduce((sum, t) => sum + t.amount, 0);
 
-  totalEntradasEl.textContent = formatCurrency(monthlyIncome);
-  totalSaidasEl.textContent = formatCurrency(monthlyExpense);
-  totalSaldoEl.textContent = formatCurrency(totalBalance);
+    const totalExpense = transactions
+        .filter(t => t.type === 'expense')
+        .reduce((sum, t) => sum + t.amount, 0);
 
-  tabelaComprasBody.innerHTML = "";
+    const totalBalance = totalIncome - totalExpense;
 
-  // TABELA HISTORICO DE COMPRAS
+    // Atualiza os cards
+    totalEntradasEl.textContent = formatCurrency(monthlyIncome);
+    totalSaidasEl.textContent = formatCurrency(monthlyExpense);
+    totalSaldoEl.textContent = formatCurrency(totalBalance);
 
-  transacoesDoMesAtual.forEach((transaction) => {
-    const newRowHTML = `
+    // Limpa a tabela
+    tabelaComprasBody.innerHTML = '';
+
+    // Preenche a tabela com as transações do mês atual
+    transacoesDoMesAtual.forEach(transaction => {
+        const newRowHTML = `
             <tr>
                 <td>${transaction.name}</td>
                 <td>${formatDate(transaction.date)}</td>
                 <td>${formatCurrency(transaction.amount)}</td>
-                <td>${
-                  transaction.type === "income"
-                    ? "Entrada"
-                    : transaction.paymentMethod
-                }</td>
+                <td>${transaction.type === 'income' ? 'Entrada' : transaction.paymentMethod}</td>
                 <td class="acoes-tabela">
-                <button class="btn-editar" data-id="${transaction.id}">
-                    <i class="fa-solid fa-pen-to-square"></i>
-                </button>
-                <button class="btn-excluir" data-id="${transaction.id}">
-                    <i class="fa-solid fa-trash"></i>
-                </button>
+                    <button class="btn-editar" data-id="${transaction.id}">
+                        <i class="fa-solid fa-pen-to-square"></i>
+                    </button>
+                    <button class="btn-excluir" data-id="${transaction.id}">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+                </td>
             </tr>
         `;
-    tabelaComprasBody.innerHTML += newRowHTML;
-  });
-
-  const pagamentosDoMes = transacoesDoMesAtual.filter((transaction) => {
-    return (
-      transaction.type === "expense" &&
-      transaction.paymentMethod !== "debito" &&
-      transaction.paymentMethod !== "pix"
-    );
-  });
-
-  listaPagamentosMensais.innerHTML = "";
-
-  if (pagamentosDoMes.length > 0) {
-    pagamentosDoMes.forEach((pagamento) => {
-      const listItemHTML = `
-            <li>
-                <span class="pagamento-nome">${pagamento.name}</span>
-                <span class="pagamento-valor">${formatCurrency(
-                  pagamento.amount
-                )}</span>
-                <span class="pagamento-info">${
-                  pagamento.installmentInfo || ""
-                }</span>
-            </li>
-        `;
-      listaPagamentosMensais.innerHTML += listItemHTML;
+        tabelaComprasBody.innerHTML += newRowHTML;
     });
-  } else {
-    listaPagamentosMensais.innerHTML =
-      '<li class="sem-pagamentos">Nenhum pagamento recorrente este mês.</li>';
-  }
+
+    // Atualiza pagamentos mensais
+    const pagamentosDoMes = transacoesDoMesAtual.filter(transaction => {
+        return transaction.type === 'expense' &&
+               transaction.paymentMethod !== 'debito' &&
+               transaction.paymentMethod !== 'pix';
+    });
+
+    listaPagamentosMensais.innerHTML = ''; 
+
+    if (pagamentosDoMes.length > 0) {
+        pagamentosDoMes.forEach(pagamento => {
+            const listItemHTML = `
+                <li>
+                    <span class="pagamento-nome">${pagamento.name}</span>
+                    <span class="pagamento-valor">${formatCurrency(pagamento.amount)}</span>
+                    <span class="pagamento-info">${pagamento.installmentInfo || ''}</span>
+                </li>
+            `;
+            listaPagamentosMensais.innerHTML += listItemHTML;
+        });
+    } else {
+        listaPagamentosMensais.innerHTML = '<li class="sem-pagamentos">Nenhum pagamento recorrente este mês.</li>';
+    }
+}
+
+// FUNÇÕES DE EDIÇÃO
+function editarTransacao(id) {
+    const transaction = transactions.find(t => t.id === id);
+    
+    if (!transaction) {
+        alert('Transação não encontrada!');
+        return;
+    }
+    
+    if (transaction.type === 'income') {
+        editarEntrada(transaction);
+    } else {
+        editarSaida(transaction);
+    }
+}
+
+function editarEntrada(transaction) {
+    document.querySelector('#name-entrada').value = transaction.name;
+    document.querySelector('#data-entrada').value = transaction.date;
+    document.querySelector('#valor-entrada').value = transaction.amount;
+    
+    const modal = document.querySelector('#modal-entrada');
+    modal.showModal();
+    modal.setAttribute('data-editing-id', transaction.id);
+}
+
+function editarSaida(transaction) {
+    document.querySelector('#name-saida').value = transaction.name;
+    document.querySelector('#data-saida').value = transaction.date;
+    document.querySelector('#valor-saida').value = transaction.amount;
+    document.querySelector('#forma-pagamento-saida').value = transaction.paymentMethod;
+    
+    const modal = document.querySelector('#modal-saida');
+    modal.showModal();
+    modal.setAttribute('data-editing-id', transaction.id);
 }
 
 // CODIGOS DE EVENT LISTENERS
 
 // FORM SAIDA
+formSaida.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const nome = document.querySelector('#name-saida').value;
+    const data = document.querySelector('#data-saida').value;
+    const valorString = document.querySelector('#valor-saida').value;
+    const formaPagamento = document.querySelector('#forma-pagamento-saida').value;
 
-formSaida.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const nome = document.querySelector("#name-saida").value;
-  const data = document.querySelector("#data-saida").value;
-  const valorString = document.querySelector("#valor-saida").value;
-  const formaPagamento = document.querySelector("#forma-pagamento-saida").value;
+    const valorCorrigido = valorString.replace(',', '.');
+    const valorNumerico = parseFloat(valorCorrigido);
 
-  const valorCorrigido = valorString.replace(",", ".");
+    if (!nome || !data || !valorString || !formaPagamento) {
+        alert('Por favor, preencha todos os campos!');
+        return;
+    }
 
-  const valorNumerico = parseFloat(valorCorrigido);
+    const modal = document.querySelector('#modal-saida');
+    const editingId = modal.getAttribute('data-editing-id');
 
-  if (!nome || !data || !valorString || !formaPagamento) {
-    alert("Por favor, preencha todos os campos!");
-    return;
-  }
+    if (editingId) {
+        // MODO EDIÇÃO - atualiza transação existente
+        const transactionId = parseInt(editingId);
+        const transactionIndex = transactions.findIndex(t => t.id === transactionId);
+        
+        if (transactionIndex !== -1) {
+            transactions[transactionIndex] = {
+                id: transactionId,
+                name: nome,
+                date: data,
+                amount: valorNumerico,
+                paymentMethod: formaPagamento,
+                type: 'expense'
+            };
+            console.log('Transação editada:', transactions[transactionIndex]);
+        }
+        
+        // Remove o atributo de edição
+        modal.removeAttribute('data-editing-id');
+    } else {
+        // MODO CRIAÇÃO - adiciona nova transação
+        const newTransaction = {
+            id: new Date().getTime(),
+            name: nome,
+            date: data,
+            amount: valorNumerico,
+            paymentMethod: formaPagamento,
+            type: 'expense'
+        };
+        addTransaction(newTransaction);
+        console.log('Nova transação criada:', newTransaction);
+    }
 
-  const newTransaction = {
-    id: new Date().getTime(),
-    name: nome,
-    date: data,
-    amount: valorNumerico,
-    paymentMethod: formaPagamento,
-    type: "expense",
-  };
-  addTransaction(newTransaction);
-
-  updateUI();
-  formSaida.reset();
-  document.querySelector("#modal-saida").close();
+    updateUI();
+    formSaida.reset();
+    modal.close();
 });
 
 // FORM ENTRADA
 
-formEntrada.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const nome = document.querySelector("#name-entrada").value;
-  const data = document.querySelector("#data-entrada").value;
-  const valor = document.querySelector("#valor-entrada").value;
+formEntrada.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const nome = document.querySelector('#name-entrada').value;
+    const data = document.querySelector('#data-entrada').value;
+    const valor = document.querySelector('#valor-entrada').value;
 
-  if (!nome || !data || !valor) {
-    alert("Por favor, preencha todos os campos!");
-    return;
-  }
+    if (!nome || !data || !valor) {
+        alert('Por favor, preencha todos os campos!');
+        return;
+    }
 
-  const newTransaction = {
-    id: new Date().getTime(),
-    name: nome,
-    date: data,
-    amount: parseFloat(valor),
-    type: "income",
-  };
-  addTransaction(newTransaction);
+    const modal = document.querySelector('#modal-entrada');
+    const editingId = modal.getAttribute('data-editing-id');
 
-  updateUI();
-  formEntrada.reset();
-  document.querySelector("#modal-entrada").close();
+    if (editingId) {
+        // MODO EDIÇÃO - atualiza transação existente
+        const transactionId = parseInt(editingId);
+        const transactionIndex = transactions.findIndex(t => t.id === transactionId);
+        
+        if (transactionIndex !== -1) {
+            // Mantém o ID original, atualiza só os outros dados
+            transactions[transactionIndex] = {
+                id: transactionId,
+                name: nome,
+                date: data,
+                amount: parseFloat(valor),
+                type: 'income'
+            };
+            console.log('Transação editada:', transactions[transactionIndex]);
+        }
+        
+        // Remove o atributo de edição
+        modal.removeAttribute('data-editing-id');
+    } else {
+        // MODO CRIAÇÃO - adiciona nova transação
+        const newTransaction = {
+            id: new Date().getTime(),
+            name: nome,
+            date: data,
+            amount: parseFloat(valor),
+            type: 'income'
+        };
+        addTransaction(newTransaction);
+        console.log('Nova transação criada:', newTransaction);
+    }
+
+    updateUI();
+    formEntrada.reset();
+    modal.close();
 });
 
 // FORM PARCELAMENTOS
@@ -295,4 +384,5 @@ tabelaComprasBody.addEventListener('click', (event) => {
     }
   });
   
-updateUI();
+
+    updateUI();

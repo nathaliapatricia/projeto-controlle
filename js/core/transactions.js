@@ -29,26 +29,55 @@ function calculateTotalExpense() {
         .reduce((summ, t) => summ + t.amount, 0);
 }
 
-/** Calcula o saldo final
- * @returns {numbers}
- */
 
-function calculateBalance() {
-    const hoje = new Date();
+  // FUNÇÃO PARA EXLCUIR TRANSAÇÃO
 
-    const transacoesAteHoje = transactions.filter(transaction =>{
-        const dataDaTransacao = new Date(transaction.date + "T00:00:00");
-        return dataDaTransacao <= hoje;
-    });
+// FUNÇÃO PARA EXCLUIR TRANSAÇÃO
+function excluirTransacao(id) {
+    transactions = transactions.filter(transaction => transaction.id !== id);
+    updateUI(); // Esta função agora vai funcionar
+}
 
-     const totalIncome = transacoesAteHoje
-        .filter(t => t.type === 'income')
-        .reduce((sum, t) => sum + t.amount, 0);
+function editarTransacao(id) {
+  const transaction = transactios.fint(t => t.id === id);
 
-    const totalExpense = transacoesAteHoje
-        .filter(t => t.type === 'expense')
-        .reduce((sum, t) => sum + t.amount, 0);
+  if (!transaction) {
+    alert("Transação não encontrada.");
+    return;
+  }
 
-    return totalIncome - totalExpense;
+  console.log('Editando Transação:', transacation);
+
+  if (transaction.type === 'income') {
+      editarEntrada(transaction);
+  } else {
+    editarSaida(transaction);
+  }
+}
+
+// FUNÇÃO PARA EDITAR ENTRADA
+function editarEntrada(transacation) {
+  document.querySelector('#name-entrada').value = transacation.name;
+  document.querySelector('#data-entrada').value = transacation.date;
+  document.querySelector('#valor-entrada').value = transaction.amount;
+
+  const modal = document.querySelector('#modal-entrada');
+  modal.showModal();
+
+  modal.setAttribute('data-editing-id', transacation.id);
+}
+
+// FUNÇÃO PARA EDITAR SAÍDA
+
+function editarSaida(transacation) {
+  document.querySelector('#name-saida').value = transacation.name;
+  document.querySelector('#data-saida').value = transacation.date;
+  document.querySelector('#valor-saida').value = transacation.amount;
+  document.querySelector('#forma-de-pagamento').value = transacation.paymentMethod;
+
+  const modal = document.querySelector('#modal-saida');
+
+  modal.showModal();
+  modal.setAttribute('data-editing-id', transacation.id);
 
 }
