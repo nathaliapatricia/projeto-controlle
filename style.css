@@ -45,6 +45,20 @@ body {
     align-items: center;
 }
 
+.btn-investimentos {
+    display: block;
+    width: 70%;
+    font-size: 22px;
+    margin: 8px;
+    padding: 12px;
+    border-radius: 30px;
+    border: 0px;
+    cursor: pointer; /* mostra a “mãozinha” */
+    background-color: #3BAFDA;
+    color: #fff;
+    font-weight: 600;
+    transition: background-color 180ms ease, box-shadow 180ms ease, transform 120ms ease;
+}
 
 
 .sidemenu {
