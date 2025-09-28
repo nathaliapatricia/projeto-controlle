@@ -83,8 +83,7 @@ function updateUI() {
     // Atualiza pagamentos mensais
     const pagamentosDoMes = transacoesDoMesAtual.filter(transaction => {
         return transaction.type === 'expense' &&
-               transaction.paymentMethod !== 'debito' &&
-               transaction.paymentMethod !== 'pix';
+               transaction.installmentInfo || transaction.paymentMethod === 'recorrente'
     });
 
     listaPagamentosMensais.innerHTML = ''; 
@@ -177,6 +176,7 @@ formSaida.addEventListener('submit', (event) => {
                 paymentMethod: formaPagamento,
                 type: 'expense'
             };
+            salvarTransacoes();
             console.log('Transação editada:', transactions[transactionIndex]);
         }
         
@@ -231,6 +231,7 @@ formEntrada.addEventListener('submit', (event) => {
                 amount: parseFloat(valor),
                 type: 'income'
             };
+            salvarTransacoes();
             console.log('Transação editada:', transactions[transactionIndex]);
         }
         
@@ -384,5 +385,5 @@ tabelaComprasBody.addEventListener('click', (event) => {
     }
   });
   
-
+    carregarTransacoes();
     updateUI();
