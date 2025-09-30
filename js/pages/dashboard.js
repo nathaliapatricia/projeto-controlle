@@ -41,15 +41,8 @@ function updateUI() {
         .reduce((sum, t) => sum + t.amount, 0);
 
     // Calcula o saldo total (não só do mês atual)
-    const totalIncome = transactions
-        .filter(t => t.type === 'income')
-        .reduce((sum, t) => sum + t.amount, 0);
+    const totalBalance = calculateBalance();
 
-    const totalExpense = transactions
-        .filter(t => t.type === 'expense')
-        .reduce((sum, t) => sum + t.amount, 0);
-
-    const totalBalance = totalIncome - totalExpense;
 
     // Atualiza os cards
     totalEntradasEl.textContent = formatCurrency(monthlyIncome);
