@@ -1,64 +1,144 @@
-@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap');
-
+/* =================================== */
+/* RESET E ESTILOS GLOBAIS DA PÁGINA   */
+/* =================================== */
 * { 
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-
 .body-investimentos {
-    background-color: #F8F9FA;
+    background-color: #f0f2f5; /* Um off-white neutro para o fundo */
     font-family: 'Sora', sans-serif;
+    color: #333;
 }
 
-
+/* =================================== */
+/* HEADER DA PÁGINA                    */
+/* =================================== */
 .header-investimentos {
     display: flex;
     align-items: center;
-    padding: 16px 32px;
     justify-content: space-between;
-    background-color: #0C0F17;
-
+    padding: 12px 32px;
+    background-color: #0C0F17; /* COR QUE VOCÊ PEDIU */
+    color: white;
 }
-
-.btn-voltar {
-    background-color: transparent;
-    border-radius: 30px;
-    color: #FFFFFF;
-    width: 125px;
-    height: 40px;
-    border-color: #3BAFDA;
-    border: 1px solid #3BAFDA;
-    font-size: 16px;
-    font-weight: 600;
-
-
-}
-
-.btn-voltar:hover{
-    cursor: pointer;
-    background-color: #3BAFDA;
-}
-
 .logo-investimentos {
-    justify-content: center;
-    align-items: center;
+    height: 40px;
 }
-
-.btn-add-ativos {
-    border-radius: 30px;
-    width: 280px;
-    height: 50px;
-    justify-content: center;
+.btn-voltar, .btn-adicionar-ativo {
+    display: flex;
     align-items: center;
-    background-color: #3BAFDA;
-    color: #FFFFFF;
-    font-size: 20px;
+    gap: 8px;
+    padding: 10px 24px;
+    border-radius: 9999px;
     font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
     border: none;
 }
+.btn-voltar {
+    color: #F8F9FA;
+    background-color: transparent;
+    border: 1px solid #6C757D;
+}
+.btn-voltar:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: #F8F9FA;
+}
+.btn-adicionar-ativo {
+    background-color: #3BAFDA; /* COR QUE VOCÊ PEDIU */
+    color: #0C0F17;
+}
+.btn-adicionar-ativo:hover {
+    opacity: 0.85;
+}
 
-.btn-add-ativos:hover{
-    cursor: pointer;
-    background-color: #0091C7;
+/* =================================== */
+/* MODAL GLOBAL E BACKDROP             */
+/* =================================== */
+dialog {
+    padding: 0;
+    border: 2px solid #3BAFDA; /* BORDA QUE VOCÊ PEDIU */
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 550px;
+    margin: auto;
+    background-color: #F5F5F5; /* COR QUE VOCÊ PEDIU */
+}
+dialog::backdrop {
+    background: rgba(12, 15, 23, 0.4); /* Fundo do Header com transparência */
+    backdrop-filter: blur(3px);
+}
+.modal-container {
+    display: flex;
+    flex-direction: column;
+}
+
+/* ========================================== */
+/* HEADER DO MODAL (COM A ESTRUTURA CORRIGIDA) */
+/* ========================================== */
+#modal-add-ativos .modal-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+}
+#modal-add-ativos .modal-title {
+    margin-right: auto; /* A MÁGICA PARA EMPURRAR O SWITCH */
+    font-size: 20px;
+    font-weight: 700;
+    color: #0C0F17;
+}
+#modal-add-ativos .close-modal {
+    background: none; border: none; cursor: pointer; color: #6C757D;
+    padding: 4px; display: grid; place-items: center; border-radius: 50%;
+}
+#modal-add-ativos .close-modal:hover {
+    background-color: #e5e7eb;
+}
+
+/* =================================== */
+/* COMPONENTE: TOGGLE SWITCH           */
+/* =================================== */
+.toggle-switch {
+    display: flex; align-items: center; gap: 12px; cursor: pointer;
+    font-weight: 600; font-size: 14px; flex-shrink: 0;
+}
+.toggle-label { color: #6C757D; }
+.toggle-label--active { color: #0C0F17; }
+.switch-control {
+    position: relative; width: 50px; height: 28px;
+    background-color: #e5e7eb; border-radius: 9999px;
+}
+.switch-slider {
+    display: grid; place-items: center; width: 24px; height: 24px;
+    background-color: white; border-radius: 50%;
+    position: absolute; top: 2px; left: 2px;
+    transition: transform 0.3s ease;
+    font-size: 16px; color: #3BAFDA;
+}
+.switch-input {
+    position: absolute; opacity: 0; width: 100%; height: 100%; cursor: pointer;
+}
+.switch-input:checked + .switch-slider {
+    transform: translateX(22px);
+}
+
+/* =================================== */
+/* FORMULÁRIO DENTRO DO MODAL          */
+/* =================================== */
+#modal-add-ativos .modal-body { 
+    padding: 24px; 
+    border-top: 1px solid #dee2e6; 
+}
+/* ... O restante do CSS do formulário que te passei antes pode ser colado aqui ... */
+/* ... (ativo-form, form-row, input-group, etc.) ... */
+/* Ajuste apenas o botão 'btn-adicionar' para a cor correta */
+.ativo-form .btn-adicionar {
+    background-color: #3BAFDA; /* COR QUE VOCÊ PEDIU */
+    /* ... (resto do estilo do botão) ... */
 }
